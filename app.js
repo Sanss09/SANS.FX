@@ -1,51 +1,46 @@
 const logo = "assets/sansfx-logo.jpeg";
 
-/*
-  GANTI URL DI BAWAH INI DENGAN LINK PENDAFTARAN BROKER
-  YANG NANTI DIBERIKAN OLEH TEAM SANS.FX.
-*/
 const brokerRegistrationUrl = "https://example.com/daftar-broker";
 
-let state = {
-  role: "management",
-  tab: "overview"
-};
-
-const defaultBio = {
-  name: "Nama Mitra Anda",
+const defaultProfile = {
+  name: "Nama Pengguna",
+  city: "Jakarta",
   logo: logo,
-  description:
-    "Bangun jaringan dan berkembang bersama ekosistem SANS.FX.",
-  whatsapp: "https://wa.me/6281200000000",
-  instagram: "https://instagram.com/",
-  telegram: "https://t.me/",
-  broker: brokerRegistrationUrl
+  background: "",
+  description: "Berkembang bersama jaringan SANS.FX.",
+  links: [
+    {
+      label: "Daftar Broker Resmi",
+      url: brokerRegistrationUrl
+    },
+    {
+      label: "WhatsApp",
+      url: "https://wa.me/6281200000000"
+    },
+    {
+      label: "Instagram",
+      url: "https://instagram.com/"
+    }
+  ]
 };
 
-function getBio() {
+let state = {
+  role: "Mitra",
+  tab: "dashboard",
+  sidebarOpen: true
+};
+
+function profileData() {
   return JSON.parse(
-    localStorage.getItem("sansfx_bio")
-  ) || defaultBio;
+    localStorage.getItem("sansfx_profile")
+  ) || defaultProfile;
 }
 
-function saveBio() {
-  const bio = {
-    name: document.querySelector("#bioName").value,
-    logo: document.querySelector("#bioLogo").value || logo,
-    description: document.querySelector("#bioDescription").value,
-    whatsapp: document.querySelector("#bioWhatsapp").value,
-    instagram: document.querySelector("#bioInstagram").value,
-    telegram: document.querySelector("#bioTelegram").value,
-    broker: document.querySelector("#bioBroker").value
-  };
-
-  localStorage.setItem("sansfx_bio", JSON.stringify(bio));
-
-  document.querySelector("#saveMessage").innerHTML = `
-    <div class="notice">
-      Pengaturan Link Bio berhasil disimpan di browser ini.
-    </div>
-  `;
+function saveProfile(data) {
+  localStorage.setItem(
+    "sansfx_profile",
+    JSON.stringify(data)
+  );
 }
 
 function topbar() {
@@ -101,8 +96,8 @@ function home() {
             </h1>
 
             <p class="lead">
-              SANS.FX membantu mitra dan komunitas membangun jaringan yang
-              lebih terarah melalui strategi advertising yang cerdas,
+              SANS.FX membantu mitra dan komunitas membangun jaringan
+              yang lebih terarah melalui strategi advertising yang cerdas,
               solusi digital, dan pengelolaan hubungan yang profesional.
             </p>
 
@@ -156,13 +151,12 @@ function home() {
           </div>
         </section>
 
-        <section class="section" id="about">
+        <section class="section">
           <h2>Solusi untuk jaringan yang berkembang</h2>
 
           <p class="section-sub">
-            SANS.FX menghadirkan ruang kerja digital bagi mitra yang ingin
-            mengembangkan komunitas, membangun brand, dan mengelola jaringan
-            secara lebih efektif.
+            Membangun koneksi, memperkuat brand, dan mengelola jaringan
+            dalam satu ruang kerja digital.
           </p>
 
           <div class="grid3">
@@ -170,8 +164,8 @@ function home() {
               <div class="icon">✦</div>
               <h3>Smart Advertising</h3>
               <p>
-                Bantu komunitas dan mitra menjangkau audiens yang tepat
-                melalui promosi digital yang lebih terarah.
+                Membantu mitra menjangkau audiens yang tepat melalui
+                strategi promosi digital yang lebih terarah.
               </p>
             </article>
 
@@ -179,8 +173,8 @@ function home() {
               <div class="icon">◈</div>
               <h3>Network Management</h3>
               <p>
-                Kelola struktur mitra, tim, dan client secara terorganisir
-                melalui sistem yang terhubung.
+                Mengatur hubungan antara mitra, tim, dan client secara
+                lebih rapi dan profesional.
               </p>
             </article>
 
@@ -188,64 +182,10 @@ function home() {
               <div class="icon">↗</div>
               <h3>Performance Insight</h3>
               <p>
-                Tampilkan perkembangan trading secara manual dan profesional
-                sebagai nilai tambah bagi jaringan Anda.
+                Menampilkan perkembangan trading sebagai nilai tambah
+                bagi jaringan dan komunitas.
               </p>
             </article>
-          </div>
-        </section>
-
-        <section class="section" id="how-it-works">
-          <div class="card">
-            <h2>Bagaimana SANS.FX bekerja?</h2>
-
-            <p class="section-sub">
-              Kami membangun kerja sama bersama mitra yang ingin mengembangkan
-              komunitas atau jaringan mereka. Setelah disetujui, mitra akan
-              mendapatkan akses aplikasi atau web dari SANS.FX.
-            </p>
-
-            <div class="grid3">
-              <article class="card">
-                <div class="icon">1</div>
-                <h3>Ajukan Kerja Sama</h3>
-                <p>
-                  Isi formulir kerja sama dengan informasi dasar mengenai
-                  diri dan jaringan Anda.
-                </p>
-              </article>
-
-              <article class="card">
-                <div class="icon">2</div>
-                <h3>Review Team</h3>
-                <p>
-                  Team SANS.FX memeriksa dan menghubungi calon mitra.
-                </p>
-              </article>
-
-              <article class="card">
-                <div class="icon">3</div>
-                <h3>Mulai Berkembang</h3>
-                <p>
-                  Mitra mendapatkan akses sistem dan link pendaftaran broker
-                  resmi yang ditentukan SANS.FX.
-                </p>
-              </article>
-            </div>
-          </div>
-        </section>
-
-        <section class="section">
-          <div class="card">
-            <h2>Siap membangun jaringan yang lebih kuat?</h2>
-
-            <p class="section-sub">
-              Mulai percakapan kerja sama bersama SANS.FX hari ini.
-            </p>
-
-            <a class="btn btn-gold" href="#/apply">
-              Kerja Sama SANS.FX
-            </a>
           </div>
         </section>
       </main>
@@ -257,7 +197,7 @@ function home() {
   `;
 }
 
-function applyPage() {
+function applicationPage() {
   return `
     <div class="shell">
       ${topbar()}
@@ -269,34 +209,33 @@ function applyPage() {
           <h1>Kerja Sama SANS.FX</h1>
 
           <p>
-            Isi data berikut agar team SANS.FX dapat memahami profil
-            dan kebutuhan kerja sama Anda.
+            Isi formulir untuk mengajukan kerja sama bersama SANS.FX.
           </p>
 
           <div class="form-grid" style="text-align:left">
             <div class="field">
               <label>Nama Lengkap</label>
-              <input id="applyName" placeholder="Nama lengkap">
+              <input id="applyName">
             </div>
 
             <div class="field">
               <label>Nama Komunitas atau Bisnis</label>
-              <input id="applyCommunity" placeholder="Nama komunitas">
+              <input id="applyCommunity">
             </div>
 
             <div class="field">
               <label>WhatsApp</label>
-              <input id="applyWhatsapp" placeholder="+62">
+              <input id="applyWhatsapp">
             </div>
 
             <div class="field">
               <label>Email</label>
-              <input id="applyEmail" type="email" placeholder="email@example.com">
+              <input id="applyEmail" type="email">
             </div>
 
             <div class="field">
-              <label>Kota / Negara</label>
-              <input id="applyLocation" placeholder="Contoh: Jakarta, Indonesia">
+              <label>Nama Kota</label>
+              <input id="applyCity">
             </div>
 
             <div class="field">
@@ -309,12 +248,9 @@ function applyPage() {
               </select>
             </div>
 
-            <div class="field" style="grid-column: 1 / -1">
-              <label>Ceritakan rencana kerja sama Anda</label>
-              <textarea
-                id="applyMessage"
-                rows="5"
-                placeholder="Tuliskan informasi singkat mengenai jaringan atau rencana Anda"></textarea>
+            <div class="field" style="grid-column:1/-1">
+              <label>Pesan</label>
+              <textarea id="applyMessage" rows="5"></textarea>
             </div>
           </div>
 
@@ -326,13 +262,6 @@ function applyPage() {
           </button>
 
           <div id="applyResult"></div>
-
-          <a
-            href="#/"
-            class="btn btn-dark"
-            style="display:block;margin-top:10px">
-            Kembali
-          </a>
         </div>
       </main>
     </div>
@@ -344,43 +273,38 @@ function submitApplication() {
   const community = document.querySelector("#applyCommunity").value.trim();
   const whatsapp = document.querySelector("#applyWhatsapp").value.trim();
   const email = document.querySelector("#applyEmail").value.trim();
-  const location = document.querySelector("#applyLocation").value.trim();
+  const city = document.querySelector("#applyCity").value.trim();
   const profile = document.querySelector("#applyProfile").value;
   const message = document.querySelector("#applyMessage").value.trim();
 
-  const result = document.querySelector("#applyResult");
-
-  if (!name || !community || !whatsapp || !email || !location) {
-    result.innerHTML = `
+  if (!name || !community || !whatsapp || !email || !city) {
+    document.querySelector("#applyResult").innerHTML = `
       <div class="notice">
-        Mohon lengkapi nama, komunitas/bisnis, WhatsApp, email,
-        dan kota/negara.
+        Mohon lengkapi data yang wajib diisi.
       </div>
     `;
     return;
   }
 
-  const application = {
-    name,
-    community,
-    whatsapp,
-    email,
-    location,
-    profile,
-    message,
-    createdAt: new Date().toISOString()
-  };
-
   localStorage.setItem(
     "sansfx_application",
-    JSON.stringify(application)
+    JSON.stringify({
+      name,
+      community,
+      whatsapp,
+      email,
+      city,
+      profile,
+      message,
+      createdAt: new Date().toISOString()
+    })
   );
 
-  result.innerHTML = `
+  document.querySelector("#applyResult").innerHTML = `
     <div class="notice">
-      Pengajuan kerja sama berhasil dicatat pada prototype ini.
-      <br><br>
-      Silakan lanjut ke pendaftaran broker resmi melalui tombol berikut.
+      Pengajuan berhasil dicatat.<br><br>
+
+      Silakan lanjut ke link pendaftaran broker resmi:
       <br><br>
 
       <a
@@ -388,65 +312,144 @@ function submitApplication() {
         href="${brokerRegistrationUrl}"
         target="_blank"
         rel="noopener">
-        Lanjut ke Pendaftaran Broker
+        Daftar Broker
       </a>
     </div>
   `;
 }
 
-function sidebar() {
-  const menu = [
-    ["overview", "Overview"],
-    ["network", "Jaringan Saya"],
-    ["clients", "Client"],
-    ["bio", "Link Bio"],
-    ["performance", "Trading Performance"]
+function roleInfo() {
+  if (state.role === "Management") {
+    return [
+      ["Mitra", "18 aktif"],
+      ["Tim", "64 terkelola"],
+      ["Kota", "12 kota"]
+    ];
+  }
+
+  if (state.role === "Mitra") {
+    return [
+      ["Team", "8 anggota"],
+      ["Client", "126 client"],
+      ["Kota", "Jakarta"]
+    ];
+  }
+
+  return [
+    ["Client", "38 terkelola"],
+    ["Mentor", "Andi Saputra"],
+    ["Kota", "Jakarta"]
   ];
+}
 
+function dashboardSummary() {
+  if (state.role === "Management") {
+    return [
+      ["Mitra Aktif", "18", "+3 bulan ini"],
+      ["Total Tim", "64", "+8.2%"],
+      ["Total Client", "842", "+12.6%"],
+      ["Kota Terjangkau", "12", "terus berkembang"]
+    ];
+  }
+
+  if (state.role === "Mitra") {
+    return [
+      ["Team Saya", "8", "+2 bulan ini"],
+      ["Total Client", "126", "+14.4%"],
+      ["Performance Update", "76%", "bulan ini"],
+      ["Link Bio Views", "2,481", "+18.3%"]
+    ];
+  }
+
+  return [
+    ["Performance", "+8.42%", "bulan ini"],
+    ["Win Rate", "64.2%", "tercatat"],
+    ["Nama Mentor", "Andi", "aktif"],
+    ["Status Client", "Aktif", "terverifikasi"]
+  ];
+}
+
+function sidebarItems() {
+  if (state.role === "Management") {
+    return [
+      ["dashboard", "▦", "Dashboard"],
+      ["partners", "◎", "Mitra"],
+      ["teams", "◈", "Tim"],
+      ["clients", "♙", "Client"],
+      ["settings", "⚙", "Setting"]
+    ];
+  }
+
+  if (state.role === "Mitra") {
+    return [
+      ["dashboard", "▦", "Dashboard"],
+      ["teams", "◈", "Team"],
+      ["clients", "♙", "Client"],
+      ["bio", "↗", "Link Bio"],
+      ["performance", "％", "Trading Performance"],
+      ["join-team", "＋", "Join Team"],
+      ["settings", "⚙", "Setting"]
+    ];
+  }
+
+  return [
+    ["dashboard", "▦", "Dashboard"],
+    ["clients", "♙", "Data Client"],
+    ["bio", "↗", "Link Bio"],
+    ["performance", "％", "Trading Performance"],
+    ["settings", "⚙", "Setting"]
+  ];
+}
+
+function sidebar() {
   return `
-    <aside class="sidebar">
-      <div class="sidebrand">
-        <img src="${logo}" alt="SANS.FX">
+    <aside class="dashboard-sidebar ${state.sidebarOpen ? "" : "closed"}">
+      <div class="side-user">
+        <img src="${profileData().logo}" alt="Profile">
 
-        <div>
-          <strong>SANS.FX HUB</strong>
-          <small>Partner Workspace</small>
+        <div class="side-user-info">
+          <strong>${state.role}</strong>
+          <small>${profileData().name}</small>
         </div>
       </div>
 
       <div class="menu">
-        ${menu.map(item => `
+        ${sidebarItems().map(item => `
           <button
             class="${state.tab === item[0] ? "active" : ""}"
             onclick="setTab('${item[0]}')">
-            ${item[1]}
+            <span>${item[1]}</span>
+            <span class="menu-text">${item[2]}</span>
           </button>
         `).join("")}
 
-        <button onclick="location.hash = '#/'">
-          ← Kembali ke Website
+        <button class="logout-button" onclick="logout()">
+          <span>↪</span>
+          <span class="menu-text">Logout</span>
         </button>
       </div>
     </aside>
+
+    <button
+      class="sidebar-toggle ${state.sidebarOpen ? "" : "closed"}"
+      onclick="toggleSidebar()"
+      aria-label="Buka atau tutup sidebar">
+      ‹
+    </button>
   `;
 }
 
-function dashboard() {
-  let content = overview();
-
-  if (state.tab === "network") content = network();
-  if (state.tab === "clients") content = clients();
-  if (state.tab === "bio") content = bioSettings();
-  if (state.tab === "performance") content = performance();
+function dashboardPage() {
+  const info = roleInfo();
 
   return `
     <div class="shell">
       ${topbar()}
 
-      <main class="dashboard">
+      <main class="dashboard-layout">
         ${sidebar()}
 
-        <section class="content">
+        <section class="dashboard-main">
           <div class="dashhead">
             <div>
               <div class="eyebrow">PRIVATE WORKSPACE</div>
@@ -456,98 +459,123 @@ function dashboard() {
             <div class="role-switch">
               <button
                 class="${state.role === "Management" ? "active" : ""}"
-                onclick="setRole('Management')">
+                onclick="changeRole('Management')">
                 Management
               </button>
 
               <button
                 class="${state.role === "Mitra" ? "active" : ""}"
-                onclick="setRole('Mitra')">
+                onclick="changeRole('Mitra')">
                 Mitra
               </button>
 
               <button
-                class="${state.role === "Tim" ? "active" : ""}"
-                onclick="setRole('Tim')">
-                Tim
-              </button>
-
-              <button
                 class="${state.role === "Client" ? "active" : ""}"
-                onclick="setRole('Client')">
+                onclick="changeRole('Client')">
                 Client
               </button>
             </div>
           </div>
 
-          ${content}
+          <p class="dashboard-intro">
+            Selamat datang, ${profileData().name}. Berikut ringkasan
+            jaringan dan aktivitas Anda hari ini.
+          </p>
+
+          <div class="role-info">
+            ${info.map(item => `
+              <div class="info-box">
+                <span>${item[0]}</span>
+                <b>${item[1]}</b>
+              </div>
+            `).join("")}
+          </div>
+
+          ${dashboardContent()}
         </section>
       </main>
     </div>
   `;
 }
 
-function overview() {
+function dashboardContent() {
+  if (state.tab === "bio") return bioSettings();
+  if (state.tab === "settings") return settingsPage();
+  if (state.tab === "join-team") return joinTeamPage();
+  if (state.tab === "performance") return performancePage();
+  if (state.tab === "clients") return clientPage();
+  if (state.tab === "partners") return partnerPage();
+  if (state.tab === "teams") return teamPage();
+
+  return dashboardHome();
+}
+
+function dashboardHome() {
   return `
     <div class="stats">
-      <div class="stat">
-        <span>Jaringan Aktif</span>
-        <b>18</b>
-        <small>terkelola</small>
-      </div>
-
-      <div class="stat">
-        <span>Tim</span>
-        <b>42</b>
-        <small>terdaftar</small>
-      </div>
-
-      <div class="stat">
-        <span>Client</span>
-        <b>284</b>
-        <small>tercatat</small>
-      </div>
-
-      <div class="stat">
-        <span>Performance Update</span>
-        <b>76%</b>
-        <small>bulan ini</small>
-      </div>
+      ${dashboardSummary().map(item => `
+        <div class="stat">
+          <span>${item[0]}</span>
+          <b>${item[1]}</b>
+          <small>${item[2]}</small>
+        </div>
+      `).join("")}
     </div>
 
     <div class="panel">
       <h3>Aktivitas Terbaru</h3>
 
+      <div class="activity-list">
+        <div class="activity-item">
+          <strong>Data jaringan diperbarui</strong>
+          <span>Hari ini</span>
+        </div>
+
+        <div class="activity-item">
+          <strong>Client baru terdaftar melalui jaringan</strong>
+          <span>Kemarin</span>
+        </div>
+
+        <div class="activity-item">
+          <strong>Trading performance diperbarui</strong>
+          <span>2 hari lalu</span>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function partnerPage() {
+  return `
+    <div class="panel">
+      <h3>Daftar Mitra</h3>
+      <p class="section-sub">
+        Data mitra yang bekerja sama dengan SANS.FX.
+      </p>
+
       <table class="table">
         <thead>
           <tr>
-            <th>Aktivitas</th>
-            <th>Nama</th>
+            <th>Nama Mitra</th>
+            <th>Komunitas</th>
+            <th>Kota</th>
             <th>Status</th>
-            <th>Waktu</th>
           </tr>
         </thead>
 
         <tbody>
           <tr>
-            <td>Pendaftaran client baru</td>
-            <td>Ahmad F.</td>
-            <td>Menunggu verifikasi</td>
-            <td>Hari ini</td>
-          </tr>
-
-          <tr>
-            <td>Update trading performance</td>
+            <td>Andi Saputra</td>
             <td>Andi Gold Team</td>
-            <td>Berhasil</td>
-            <td>Kemarin</td>
+            <td>Jakarta</td>
+            <td>Aktif</td>
           </tr>
 
           <tr>
-            <td>Tim baru ditambahkan</td>
-            <td>Rizky A.</td>
+            <td>Budi Trader</td>
+            <td>Budi Community</td>
+            <td>Bandung</td>
             <td>Aktif</td>
-            <td>2 hari lalu</td>
           </tr>
         </tbody>
       </table>
@@ -555,16 +583,19 @@ function overview() {
   `;
 }
 
-function network() {
+function teamPage() {
   return `
     <div class="panel">
-      <h3>Jaringan Saya</h3>
+      <h3>Team</h3>
+      <p class="section-sub">
+        Anggota team yang berada di bawah jaringan Anda.
+      </p>
 
       <table class="table">
         <thead>
           <tr>
             <th>Nama</th>
-            <th>Peran</th>
+            <th>Kota</th>
             <th>Client</th>
             <th>Status</th>
           </tr>
@@ -572,24 +603,17 @@ function network() {
 
         <tbody>
           <tr>
-            <td>Andi Gold Team</td>
-            <td>Tim</td>
-            <td>63</td>
-            <td>Aktif</td>
-          </tr>
-
-          <tr>
-            <td>Budi Trader Club</td>
-            <td>Tim</td>
+            <td>Rizky A.</td>
+            <td>Jakarta</td>
             <td>42</td>
             <td>Aktif</td>
           </tr>
 
           <tr>
-            <td>Raka Community</td>
-            <td>Tim</td>
+            <td>Dimas P.</td>
+            <td>Depok</td>
             <td>28</td>
-            <td>Menunggu update</td>
+            <td>Aktif</td>
           </tr>
         </tbody>
       </table>
@@ -597,54 +621,37 @@ function network() {
   `;
 }
 
-function clients() {
+function clientPage() {
   return `
     <div class="panel">
-      <div class="dashhead">
-        <div>
-          <h3>Client</h3>
-          <p class="section-sub">
-            Client yang bergabung melalui jaringan Anda.
-          </p>
-        </div>
-
-        <button
-          class="btn btn-gold"
-          onclick="alert('Form client akan disambungkan ke database pada tahap berikutnya.')">
-          + Tambah Client
-        </button>
-      </div>
+      <h3>Data Client</h3>
+      <p class="section-sub">
+        Data client yang terdaftar melalui jaringan Anda.
+      </p>
 
       <table class="table">
         <thead>
           <tr>
-            <th>Nama</th>
-            <th>Mentor</th>
+            <th>Nama Client</th>
+            <th>Nama Mentor</th>
+            <th>Kota</th>
             <th>Status</th>
-            <th>Performance</th>
           </tr>
         </thead>
 
         <tbody>
           <tr>
             <td>Ahmad F.</td>
-            <td>Andi Gold Team</td>
+            <td>Andi Saputra</td>
+            <td>Jakarta</td>
             <td>Aktif</td>
-            <td>Sudah diperbarui</td>
           </tr>
 
           <tr>
             <td>Rizky A.</td>
-            <td>Andi Gold Team</td>
+            <td>Andi Saputra</td>
+            <td>Bekasi</td>
             <td>Aktif</td>
-            <td>Belum diperbarui</td>
-          </tr>
-
-          <tr>
-            <td>Dimas P.</td>
-            <td>Budi Trader Club</td>
-            <td>Menunggu</td>
-            <td>-</td>
           </tr>
         </tbody>
       </table>
@@ -653,49 +660,91 @@ function clients() {
 }
 
 function bioSettings() {
-  const bio = getBio();
+  const data = profileData();
 
   return `
     <div class="two">
       <div class="panel">
         <h3>Pengaturan Link Bio</h3>
 
-        <div class="form-grid">
-          <div class="field">
-            <label>Nama</label>
-            <input id="bioName" value="${bio.name}">
-          </div>
+        <div class="field">
+          <label>Nama</label>
+          <input id="bioName" value="${data.name}">
+        </div>
 
-          <div class="field">
-            <label>URL Logo</label>
-            <input id="bioLogo" value="${bio.logo}">
-          </div>
+        <br>
 
-          <div class="field" style="grid-column:1/-1">
-            <label>Deskripsi</label>
-            <textarea id="bioDescription" rows="4">${bio.description}</textarea>
-          </div>
+        <div class="upload-box">
+          <label>Logo</label>
+          <input
+            id="bioLogoFile"
+            type="file"
+            accept="image/*"
+            onchange="previewImage(event, 'bioLogoPreview')">
 
-          <div class="field">
-            <label>WhatsApp</label>
-            <input id="bioWhatsapp" value="${bio.whatsapp}">
-          </div>
+          <img
+            id="bioLogoPreview"
+            src="${data.logo}"
+            style="width:80px;height:80px;object-fit:cover;border-radius:50%;margin-top:12px">
+        </div>
 
-          <div class="field">
-            <label>Instagram</label>
-            <input id="bioInstagram" value="${bio.instagram}">
-          </div>
+        <br>
 
-          <div class="field">
-            <label>Telegram</label>
-            <input id="bioTelegram" value="${bio.telegram}">
-          </div>
+        <div class="upload-box">
+          <label>Background Link Bio</label>
+          <input
+            id="bioBackgroundFile"
+            type="file"
+            accept="image/*"
+            onchange="previewImage(event, 'bioBackgroundPreview')">
 
-          <div class="field">
-            <label>Link Pendaftaran Broker</label>
-            <input id="bioBroker" value="${bio.broker}">
+          <div
+            id="bioBackgroundPreview"
+            class="preview-background"
+            style="background-image:url('${data.background}')">
+            Preview Background
           </div>
         </div>
+
+        <br>
+
+        <div class="field">
+          <label>Deskripsi</label>
+          <textarea id="bioDescription" rows="4">${data.description}</textarea>
+        </div>
+
+        <h3 style="margin-top:22px">Link Tambahan</h3>
+
+        <div id="linkEditor" class="link-editor">
+          ${data.links.map((link, index) => `
+            <div class="link-row">
+              <input
+                class="link-label"
+                value="${link.label}"
+                placeholder="Nama link">
+
+              <input
+                class="link-url"
+                value="${link.url}"
+                placeholder="https://...">
+
+              <button
+                class="btn btn-dark"
+                onclick="removeLink(${index})">
+                Hapus
+              </button>
+            </div>
+          `).join("")}
+        </div>
+
+        <button
+          class="btn btn-dark"
+          style="margin-top:12px"
+          onclick="addLink()">
+          + Tambah Link
+        </button>
+
+        <br>
 
         <button
           class="btn btn-gold"
@@ -704,15 +753,15 @@ function bioSettings() {
           Simpan Link Bio
         </button>
 
-        <div id="saveMessage"></div>
+        <div id="bioMessage"></div>
       </div>
 
       <div class="panel">
-        <h3>Link Publik Anda</h3>
+        <h3>Preview Link Bio</h3>
 
         <p class="section-sub">
-          Gunakan link ini pada TikTok, Instagram, WhatsApp,
-          atau platform lainnya.
+          Link Bio dapat digunakan di Instagram, TikTok, WhatsApp,
+          Telegram, dan platform lainnya.
         </p>
 
         <div class="notice">
@@ -723,52 +772,281 @@ function bioSettings() {
           class="btn btn-gold"
           style="margin-top:16px"
           href="#/bio/mitra">
-          Preview Link Bio
+          Buka Preview
         </a>
       </div>
     </div>
   `;
 }
 
-function performance() {
+function previewImage(event, targetId) {
+  const file = event.target.files[0];
+
+  if (!file) return;
+
+  const reader = new FileReader();
+
+  reader.onload = function () {
+    const target = document.querySelector(`#${targetId}`);
+
+    if (targetId === "bioLogoPreview") {
+      target.src = reader.result;
+    } else {
+      target.style.backgroundImage = `url('${reader.result}')`;
+    }
+
+    target.dataset.image = reader.result;
+  };
+
+  reader.readAsDataURL(file);
+}
+
+function addLink() {
+  const editor = document.querySelector("#linkEditor");
+
+  editor.insertAdjacentHTML("beforeend", `
+    <div class="link-row">
+      <input class="link-label" placeholder="Nama link">
+      <input class="link-url" placeholder="https://...">
+
+      <button
+        class="btn btn-dark"
+        onclick="this.parentElement.remove()">
+        Hapus
+      </button>
+    </div>
+  `);
+}
+
+function removeLink(index) {
+  const rows = document.querySelectorAll(".link-row");
+
+  if (rows[index]) {
+    rows[index].remove();
+  }
+}
+
+function saveBio() {
+  const oldData = profileData();
+
+  const logoPreview = document.querySelector("#bioLogoPreview");
+  const backgroundPreview = document.querySelector("#bioBackgroundPreview");
+
+  const links = [...document.querySelectorAll(".link-row")]
+    .map(row => ({
+      label: row.querySelector(".link-label").value.trim(),
+      url: row.querySelector(".link-url").value.trim()
+    }))
+    .filter(link => link.label && link.url);
+
+  const data = {
+    name: document.querySelector("#bioName").value.trim(),
+    city: oldData.city,
+    logo: logoPreview.dataset.image || oldData.logo,
+    background:
+      backgroundPreview.dataset.image || oldData.background,
+    description:
+      document.querySelector("#bioDescription").value.trim(),
+    links
+  };
+
+  saveProfile(data);
+
+  document.querySelector("#bioMessage").innerHTML = `
+    <div class="notice">
+      Link Bio berhasil disimpan pada browser ini.
+    </div>
+  `;
+}
+
+function settingsPage() {
+  const data = profileData();
+
+  return `
+    <div class="panel">
+      <h3>Setting Profil</h3>
+
+      <div class="form-grid">
+        <div class="field">
+          <label>Nama Komunitas / Profil</label>
+          <input id="settingName" value="${data.name}">
+        </div>
+
+        <div class="field">
+          <label>Nama Kota</label>
+          <input id="settingCity" value="${data.city}">
+        </div>
+      </div>
+
+      <div class="upload-box" style="margin-top:16px">
+        <label>Upload Logo Komunitas</label>
+        <input
+          id="settingLogoFile"
+          type="file"
+          accept="image/*"
+          onchange="previewImage(event, 'settingLogoPreview')">
+
+        <img
+          id="settingLogoPreview"
+          src="${data.logo}"
+          style="width:80px;height:80px;object-fit:cover;border-radius:50%;margin-top:12px">
+      </div>
+
+      <div class="upload-box" style="margin-top:16px">
+        <label>Upload Background Komunitas</label>
+        <input
+          id="settingBackgroundFile"
+          type="file"
+          accept="image/*"
+          onchange="previewImage(event, 'settingBackgroundPreview')">
+
+        <div
+          id="settingBackgroundPreview"
+          class="preview-background"
+          style="background-image:url('${data.background}')">
+          Preview Background
+        </div>
+      </div>
+
+      <button
+        class="btn btn-gold"
+        style="margin-top:18px"
+        onclick="saveSettings()">
+        Simpan Setting
+      </button>
+
+      <div id="settingsMessage"></div>
+    </div>
+  `;
+}
+
+function saveSettings() {
+  const oldData = profileData();
+
+  const logoPreview = document.querySelector("#settingLogoPreview");
+  const backgroundPreview =
+    document.querySelector("#settingBackgroundPreview");
+
+  const data = {
+    ...oldData,
+    name: document.querySelector("#settingName").value,
+    city: document.querySelector("#settingCity").value,
+    logo: logoPreview.dataset.image || oldData.logo,
+    background:
+      backgroundPreview.dataset.image || oldData.background
+  };
+
+  saveProfile(data);
+
+  document.querySelector("#settingsMessage").innerHTML = `
+    <div class="notice">
+      Data komunitas berhasil disimpan.
+    </div>
+  `;
+}
+
+function joinTeamPage() {
+  return `
+    <div class="join-team-box">
+      <h2>Join Team</h2>
+
+      <p class="section-sub">
+        Tambahkan anggota baru ke dalam team Anda melalui formulir
+        pendaftaran broker resmi.
+      </p>
+
+      <div class="form-grid">
+        <div class="field">
+          <label>Nama Calon Anggota</label>
+          <input id="teamName">
+        </div>
+
+        <div class="field">
+          <label>WhatsApp</label>
+          <input id="teamWhatsapp">
+        </div>
+
+        <div class="field">
+          <label>Email</label>
+          <input id="teamEmail" type="email">
+        </div>
+
+        <div class="field">
+          <label>Nama Kota</label>
+          <input id="teamCity">
+        </div>
+      </div>
+
+      <button
+        class="btn btn-gold"
+        style="margin-top:18px"
+        onclick="submitTeamInvite()">
+        Kirim Undangan
+      </button>
+
+      <div id="teamResult"></div>
+    </div>
+  `;
+}
+
+function submitTeamInvite() {
+  const name = document.querySelector("#teamName").value.trim();
+  const whatsapp = document.querySelector("#teamWhatsapp").value.trim();
+  const email = document.querySelector("#teamEmail").value.trim();
+  const city = document.querySelector("#teamCity").value.trim();
+
+  if (!name || !whatsapp || !email || !city) {
+    document.querySelector("#teamResult").innerHTML = `
+      <div class="notice">
+        Lengkapi semua data terlebih dahulu.
+      </div>
+    `;
+    return;
+  }
+
+  document.querySelector("#teamResult").innerHTML = `
+    <div class="notice">
+      Undangan berhasil dibuat.<br><br>
+
+      <a
+        class="btn btn-gold"
+        href="${brokerRegistrationUrl}"
+        target="_blank">
+        Lanjut ke Pendaftaran Broker
+      </a>
+    </div>
+  `;
+}
+
+function performancePage() {
   return `
     <div class="panel">
       <h3>Trading Performance</h3>
 
       <p class="section-sub">
-        Data pada tahap ini diinput secara manual. Sistem belum mengambil
-        data langsung dari broker.
+        Data performance dimasukkan secara manual dan tidak diambil
+        langsung dari sistem broker.
       </p>
 
       <div class="form-grid">
         <div class="field">
           <label>Starting Equity</label>
-          <input id="start" type="number" placeholder="1000">
+          <input id="start" type="number">
         </div>
 
         <div class="field">
           <label>Ending Equity</label>
-          <input id="end" type="number" placeholder="1200">
-        </div>
-
-        <div class="field">
-          <label>Deposit Tambahan</label>
-          <input id="deposit" type="number" placeholder="0">
-        </div>
-
-        <div class="field">
-          <label>Withdrawal</label>
-          <input id="withdrawal" type="number" placeholder="0">
+          <input id="end" type="number">
         </div>
 
         <div class="field">
           <label>Total Trade</label>
-          <input id="trades" type="number" placeholder="20">
+          <input id="trades" type="number">
         </div>
 
         <div class="field">
           <label>Winning Trade</label>
-          <input id="wins" type="number" placeholder="13">
+          <input id="wins" type="number">
         </div>
       </div>
 
@@ -787,20 +1065,18 @@ function performance() {
 function calculatePerformance() {
   const start = Number(document.querySelector("#start").value) || 0;
   const end = Number(document.querySelector("#end").value) || 0;
-  const deposit = Number(document.querySelector("#deposit").value) || 0;
-  const withdrawal = Number(document.querySelector("#withdrawal").value) || 0;
   const trades = Number(document.querySelector("#trades").value) || 0;
   const wins = Number(document.querySelector("#wins").value) || 0;
 
-  const profit = end - start - deposit + withdrawal;
-  const returnRate = start ? (profit / start) * 100 : 0;
-  const winRate = trades ? (wins / trades) * 100 : 0;
+  const profit = end - start;
+  const returnRate = start ? profit / start * 100 : 0;
+  const winRate = trades ? wins / trades * 100 : 0;
 
   document.querySelector("#performanceResult").innerHTML = `
     <div class="mini-grid">
       <div class="mini">
         <b>${profit.toFixed(2)}</b>
-        <span>Net Trading P/L</span>
+        <span>Net Performance</span>
       </div>
 
       <div class="mini">
@@ -817,67 +1093,49 @@ function calculatePerformance() {
 }
 
 function bioPage() {
-  const bio = getBio();
+  const data = profileData();
+
+  const background = data.background
+    ? `background-image:url('${data.background}')`
+    : "";
 
   return `
     <div class="shell">
       ${topbar()}
 
       <main class="bio-wrap">
-        <div class="bio-card">
-          <img src="${bio.logo}" alt="${bio.name}">
+        <div
+          class="bio-card"
+          style="${background};background-size:cover;background-position:center">
 
-          <h1>${bio.name}</h1>
+          <img src="${data.logo}" alt="${data.name}">
 
-          <p>${bio.description}</p>
+          <h1>${data.name}</h1>
+
+          <p>${data.description}</p>
 
           <div class="bio-links">
-            <a
-              class="primary"
-              href="${bio.broker}"
-              target="_blank"
-              rel="noopener">
-              Daftar Broker Resmi
-            </a>
-
-            <a
-              href="${bio.whatsapp}"
-              target="_blank"
-              rel="noopener">
-              WhatsApp
-            </a>
-
-            <a
-              href="${bio.instagram}"
-              target="_blank"
-              rel="noopener">
-              Instagram
-            </a>
-
-            <a
-              href="${bio.telegram}"
-              target="_blank"
-              rel="noopener">
-              Telegram
-            </a>
+            ${data.links.map(link => `
+              <a
+                href="${link.url}"
+                target="_blank"
+                rel="noopener">
+                ${link.label}
+              </a>
+            `).join("")}
 
             <a href="#/dashboard">
               Masuk ke Workspace
             </a>
           </div>
         </div>
-
-        <div class="footer">
-          Powered by SANS.FX
-        </div>
       </main>
     </div>
   `;
 }
 
-function setRole(role) {
-  state.role = role;
-  state.tab = role === "Client" ? "performance" : "overview";
+function toggleSidebar() {
+  state.sidebarOpen = !state.sidebarOpen;
   render();
 }
 
@@ -886,11 +1144,29 @@ function setTab(tab) {
   render();
 }
 
+function changeRole(role) {
+  state.role = role;
+  state.tab = "dashboard";
+  render();
+}
+
+function logout() {
+  state.role = "Mitra";
+  state.tab = "dashboard";
+  state.sidebarOpen = true;
+  location.hash = "#/";
+}
+
 function render() {
   const route = location.hash || "#/";
 
   if (route === "#/apply") {
-    document.querySelector("#app").innerHTML = applyPage();
+    document.querySelector("#app").innerHTML = applicationPage();
+    return;
+  }
+
+  if (route.startsWith("#/dashboard")) {
+    document.querySelector("#app").innerHTML = dashboardPage();
     return;
   }
 
@@ -899,18 +1175,20 @@ function render() {
     return;
   }
 
-  if (route.startsWith("#/dashboard")) {
-    document.querySelector("#app").innerHTML = dashboard();
-    return;
-  }
-
   document.querySelector("#app").innerHTML = home();
 }
 
-window.setRole = setRole;
+window.toggleSidebar = toggleSidebar;
 window.setTab = setTab;
+window.changeRole = changeRole;
+window.logout = logout;
 window.submitApplication = submitApplication;
+window.submitTeamInvite = submitTeamInvite;
+window.previewImage = previewImage;
+window.addLink = addLink;
+window.removeLink = removeLink;
 window.saveBio = saveBio;
+window.saveSettings = saveSettings;
 window.calculatePerformance = calculatePerformance;
 
 window.addEventListener("hashchange", render);
