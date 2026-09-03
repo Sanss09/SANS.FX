@@ -4,51 +4,70 @@ const brokerRegistrationUrl =
   "https://example.com/daftar-broker";
 
 const defaultProfile = {
-  name: "Nama Pengguna",
+  owner: "Nama Pemilik Akun",
+  community: "Nama Komunitas",
   city: "Jakarta",
-  logo: logo,
-  background: "",
+  whatsapp: "",
+  logo,
+  bioBackground: "",
   description: "Berkembang bersama jaringan SANS.FX.",
   links: [
     {
       label: "Daftar Broker Resmi",
       url: brokerRegistrationUrl
-    },
-    {
-      label: "WhatsApp",
-      url: "https://wa.me/6281200000000"
-    },
-    {
-      label: "Instagram",
-      url: "https://instagram.com/"
     }
   ]
 };
 
 let state = {
-  role: "Management",
+  internalRole: "ib",
   tab: "dashboard",
-  sidebarOpen: true
+  sidebarOpen: true,
+  search: "",
+  filter: "Semua"
 };
 
-function profileData() {
+function getProfile() {
   return JSON.parse(
     localStorage.getItem("sansfx_profile")
   ) || defaultProfile;
 }
 
-function saveProfile(data) {
+function setProfile(data) {
   localStorage.setItem(
     "sansfx_profile",
     JSON.stringify(data)
   );
 }
 
+function esc(value) {
+  return String(value ?? "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+
+function publicRole() {
+  if (state.internalRole === "management") return "SANS.FX";
+  if (state.internalRole === "ib") return "IB";
+  if (state.internalRole === "subib") return "Team";
+  return "Member";
+}
+
+function internalRoleLabel() {
+  if (state.internalRole === "management") return "Management";
+  if (state.internalRole === "ib") return "Mitra";
+  if (state.internalRole === "subib") return "Sub IB";
+  return "Member";
+}
+
 function topbar() {
   return `
     <header class="topbar">
       <nav class="nav">
-        <a href="#/" class="brand">
+        <a class="brand" href="#/">
           <img src="${logo}" alt="SANS.FX">
 
           <span>
@@ -63,13 +82,13 @@ function topbar() {
         </a>
 
         <div class="navlinks">
+          <a href="#/">Beranda</a>
           <a href="#/about">Tentang</a>
-          <a href="#/how-it-works">Cara Kerja</a>
           <a href="#/apply">Kerja Sama</a>
           <a href="#/dashboard">Login</a>
         </div>
 
-        <a class="btn btn-gold" href="#/apply">
+        <a href="#/apply" class="btn btn-gold">
           Kerja Sama SANS.FX
         </a>
       </nav>
@@ -99,34 +118,17 @@ function home() {
             <p class="lead">
               SANS.FX membantu mitra dan komunitas membangun jaringan
               yang lebih terarah melalui strategi advertising yang cerdas,
-              solusi digital, dan pengelolaan hubungan yang profesional.
+              solusi digital, dan pengelolaan hubungan profesional.
             </p>
 
             <div class="actions">
-              <a class="btn btn-gold" href="#/apply">
+              <a href="#/apply" class="btn btn-gold">
                 Kerja Sama SANS.FX
               </a>
 
-              <a class="btn btn-dark" href="#/how-it-works">
-                Pelajari Cara Kerja
+              <a href="#/dashboard" class="btn btn-dark">
+                Masuk Dashboard
               </a>
-            </div>
-
-            <div class="mini-grid">
-              <div class="mini">
-                <b>Smart</b>
-                <span>Strategi promosi</span>
-              </div>
-
-              <div class="mini">
-                <b>Network</b>
-                <span>Jaringan terarah</span>
-              </div>
-
-              <div class="mini">
-                <b>Solutions</b>
-                <span>Sistem untuk mitra</span>
-              </div>
             </div>
           </div>
 
@@ -135,18 +137,18 @@ function home() {
 
             <div class="mini-grid">
               <div class="mini">
-                <b>Brand</b>
-                <span>Lebih profesional</span>
+                <b>Smart</b>
+                <span>Advertising</span>
               </div>
 
               <div class="mini">
-                <b>System</b>
-                <span>Lebih terstruktur</span>
+                <b>Network</b>
+                <span>Terarah</span>
               </div>
 
               <div class="mini">
                 <b>Growth</b>
-                <span>Lebih terukur</span>
+                <span>Terukur</span>
               </div>
             </div>
           </div>
@@ -156,8 +158,8 @@ function home() {
           <h2>Solusi untuk jaringan yang berkembang</h2>
 
           <p class="section-sub">
-            Membangun koneksi, memperkuat brand, dan mengelola jaringan
-            dalam satu ruang kerja digital.
+            Membangun koneksi, memperkuat komunitas, dan mengelola
+            jaringan dalam satu ruang kerja digital.
           </p>
 
           <div class="grid3">
@@ -165,8 +167,8 @@ function home() {
               <div class="icon">✦</div>
               <h3>Smart Advertising</h3>
               <p>
-                Membantu mitra menjangkau audiens yang tepat melalui
-                strategi promosi digital yang lebih terarah.
+                Strategi promosi digital yang membantu komunitas
+                menjangkau audiens yang tepat.
               </p>
             </article>
 
@@ -174,8 +176,8 @@ function home() {
               <div class="icon">◈</div>
               <h3>Network Management</h3>
               <p>
-                Mengatur hubungan antara mitra, tim, dan client secara
-                lebih rapi dan profesional.
+                Mengatur hubungan antara IB, Team, dan Member
+                secara terstruktur.
               </p>
             </article>
 
@@ -183,48 +185,10 @@ function home() {
               <div class="icon">↗</div>
               <h3>Performance Insight</h3>
               <p>
-                Menampilkan perkembangan trading sebagai nilai tambah
-                bagi jaringan dan komunitas.
+                Menampilkan perkembangan trading secara manual
+                dan profesional.
               </p>
             </article>
-          </div>
-        </section>
-
-        <section class="section" id="how-it-works">
-          <div class="card">
-            <h2>Bagaimana SANS.FX bekerja?</h2>
-
-            <p class="section-sub">
-              Kami membangun kerja sama bersama mitra yang ingin
-              mengembangkan komunitas atau jaringan mereka.
-            </p>
-
-            <div class="grid3">
-              <article class="card">
-                <div class="icon">1</div>
-                <h3>Ajukan Kerja Sama</h3>
-                <p>
-                  Isi formulir kerja sama dengan informasi dasar
-                  mengenai diri dan jaringan Anda.
-                </p>
-              </article>
-
-              <article class="card">
-                <div class="icon">2</div>
-                <h3>Review Team</h3>
-                <p>
-                  Team SANS.FX memeriksa dan menghubungi calon mitra.
-                </p>
-              </article>
-
-              <article class="card">
-                <div class="icon">3</div>
-                <h3>Mulai Berkembang</h3>
-                <p>
-                  Mitra mendapatkan akses sistem dan link broker resmi.
-                </p>
-              </article>
-            </div>
           </div>
         </section>
       </main>
@@ -248,17 +212,17 @@ function applicationPage() {
           <h1>Kerja Sama SANS.FX</h1>
 
           <p>
-            Isi formulir untuk mengajukan kerja sama bersama SANS.FX.
+            Isi formulir pengajuan kerja sama bersama SANS.FX.
           </p>
 
           <div class="form-grid" style="text-align:left">
             <div class="field">
-              <label>Nama Lengkap</label>
-              <input id="applyName">
+              <label>Nama Pemilik</label>
+              <input id="applyOwner">
             </div>
 
             <div class="field">
-              <label>Nama Komunitas atau Bisnis</label>
+              <label>Nama Komunitas</label>
               <input id="applyCommunity">
             </div>
 
@@ -281,8 +245,7 @@ function applicationPage() {
               <label>Profil Kerja Sama</label>
               <select id="applyProfile">
                 <option>Sudah memiliki komunitas</option>
-                <option>Belum memiliki komunitas</option>
-                <option>Memiliki jaringan atau tim</option>
+                <option>Memiliki jaringan atau Team</option>
                 <option>Ingin mengembangkan brand</option>
               </select>
             </div>
@@ -309,7 +272,7 @@ function applicationPage() {
 
 function submitApplication() {
   const data = {
-    name: document.querySelector("#applyName").value.trim(),
+    owner: document.querySelector("#applyOwner").value.trim(),
     community: document.querySelector("#applyCommunity").value.trim(),
     whatsapp: document.querySelector("#applyWhatsapp").value.trim(),
     email: document.querySelector("#applyEmail").value.trim(),
@@ -319,11 +282,11 @@ function submitApplication() {
     createdAt: new Date().toISOString()
   };
 
-  if (!data.name || !data.community || !data.whatsapp ||
+  if (!data.owner || !data.community || !data.whatsapp ||
       !data.email || !data.city) {
     document.querySelector("#applyResult").innerHTML = `
       <div class="notice">
-        Mohon lengkapi semua data wajib.
+        Mohon lengkapi seluruh data wajib.
       </div>
     `;
     return;
@@ -338,9 +301,6 @@ function submitApplication() {
     <div class="notice">
       Pengajuan berhasil dicatat.<br><br>
 
-      Silakan lanjut ke pendaftaran broker resmi:
-      <br><br>
-
       <a
         class="btn btn-gold"
         href="${brokerRegistrationUrl}"
@@ -352,52 +312,92 @@ function submitApplication() {
   `;
 }
 
-function sidebarItems() {
-  if (state.role === "Management") {
+function roleButtons() {
+  return `
+    <div class="role-switch">
+      <button
+        class="${state.internalRole === "management" ? "active" : ""}"
+        onclick="changeRole('management')">
+        SANS.FX
+      </button>
+
+      <button
+        class="${state.internalRole === "ib" ? "active" : ""}"
+        onclick="changeRole('ib')">
+        IB
+      </button>
+
+      <button
+        class="${state.internalRole === "subib" ? "active" : ""}"
+        onclick="changeRole('subib')">
+        Sub IB
+      </button>
+
+      <button
+        class="${state.internalRole === "member" ? "active" : ""}"
+        onclick="changeRole('member')">
+        Member
+      </button>
+    </div>
+  `;
+}
+
+function menuItems() {
+  if (state.internalRole === "management") {
     return [
       ["dashboard", "▦", "Dashboard"],
-      ["partners", "◎", "Mitra"],
-      ["teams", "◈", "Tim"],
-      ["clients", "♙", "Client"],
+      ["partners", "◎", "Daftar Mitra"],
+      ["teams", "◈", "Daftar Team"],
+      ["members", "♙", "Daftar Member"],
       ["settings", "⚙", "Setting"]
     ];
   }
 
-  if (state.role === "Mitra") {
+  if (state.internalRole === "ib") {
     return [
       ["dashboard", "▦", "Dashboard"],
-      ["teams", "◈", "Team"],
-      ["clients", "♙", "Client"],
+      ["teams", "◈", "Daftar Team"],
+      ["members", "♙", "Daftar Member"],
       ["bio", "↗", "Link Bio"],
       ["performance", "％", "Trading Performance"],
-      ["join-team", "＋", "Join Team"],
+      ["settings", "⚙", "Setting"]
+    ];
+  }
+
+  if (state.internalRole === "subib") {
+    return [
+      ["dashboard", "▦", "Dashboard"],
+      ["members", "♙", "Daftar Member"],
+      ["bio", "↗", "Link Bio"],
+      ["performance", "％", "Trading Performance"],
       ["settings", "⚙", "Setting"]
     ];
   }
 
   return [
     ["dashboard", "▦", "Dashboard"],
-    ["clients", "♙", "Data Client"],
-    ["bio", "↗", "Link Bio"],
     ["performance", "％", "Trading Performance"],
     ["settings", "⚙", "Setting"]
   ];
 }
 
 function sidebar() {
+  const data = getProfile();
+
   return `
     <aside class="dashboard-sidebar ${state.sidebarOpen ? "" : "closed"}">
       <div class="side-user">
-        <img src="${profileData().logo}" alt="Profile">
+        <img src="${esc(data.logo)}" alt="Logo">
 
         <div class="side-user-info">
-          <strong>${state.role}</strong>
-          <small>${profileData().name}</small>
+          <strong>${esc(data.community)}</strong>
+          <small>${esc(data.owner)}</small>
+          <small>${esc(data.city)}</small>
         </div>
       </div>
 
       <div class="menu">
-        ${sidebarItems().map(item => `
+        ${menuItems().map(item => `
           <button
             class="${state.tab === item[0] ? "active" : ""}"
             onclick="setTab('${item[0]}')">
@@ -415,140 +415,91 @@ function sidebar() {
 
     <button
       class="sidebar-toggle ${state.sidebarOpen ? "" : "closed"}"
-      onclick="toggleSidebar()">
+      onclick="toggleSidebar()"
+      aria-label="Buka atau tutup sidebar">
       ‹
     </button>
   `;
 }
 
 function roleInfo() {
-  if (state.role === "Management") {
+  const data = getProfile();
+
+  if (state.internalRole === "management") {
     return [
-      ["Role", "Management"],
-      ["Mitra", "18 aktif"],
-      ["Kota", "12 kota"]
+      ["Role Internal", "Management"],
+      ["Nama Sistem", "SANS.FX"],
+      ["Wilayah", "12 kota"]
     ];
   }
 
-  if (state.role === "Mitra") {
+  if (state.internalRole === "ib") {
     return [
-      ["Role", "Mitra"],
-      ["Team", "8 anggota"],
-      ["Kota", profileData().city]
+      ["Role Internal", "IB"],
+      ["Komunitas", data.community],
+      ["Nama Kota", data.city]
+    ];
+  }
+
+  if (state.internalRole === "subib") {
+    return [
+      ["Role Internal", "Sub IB"],
+      ["Team", data.community],
+      ["Nama Kota", data.city]
     ];
   }
 
   return [
-    ["Role", "Client"],
-    ["Nama Mentor", "Andi Saputra"],
-    ["Kota", profileData().city]
+    ["Role Internal", "Member"],
+    ["Mentor", "IB / Team"],
+    ["Nama Kota", data.city]
   ];
 }
 
-function dashboardSummary() {
-  if (state.role === "Management") {
+function summaryCards() {
+  if (state.internalRole === "management") {
     return [
-      ["Mitra Aktif", "18", "+3 bulan ini"],
+      ["Total Mitra", "18", "+3 bulan ini"],
       ["Total Team", "64", "+8.2%"],
-      ["Total Client", "842", "+12.6%"],
+      ["Total Member", "842", "+12.6%"],
       ["Kota", "12", "terjangkau"]
     ];
   }
 
-  if (state.role === "Mitra") {
+  if (state.internalRole === "ib") {
     return [
-      ["Team Saya", "8", "+2 bulan ini"],
-      ["Total Client", "126", "+14.4%"],
+      ["Total Team", "8", "+2 bulan ini"],
+      ["Total Member", "126", "+14.4%"],
       ["Performance", "76%", "bulan ini"],
       ["Bio Views", "2.481", "+18.3%"]
     ];
   }
 
+  if (state.internalRole === "subib") {
+    return [
+      ["Total Member", "38", "+5 bulan ini"],
+      ["Nama Team", "Andi Team", "aktif"],
+      ["Kota", getProfile().city, "lokasi"],
+      ["Performance", "64.2%", "tercatat"]
+    ];
+  }
+
   return [
-    ["Performance", "+8.42%", "bulan ini"],
+    ["Trading Performance", "+8.42%", "bulan ini"],
     ["Win Rate", "64.2%", "tercatat"],
     ["Mentor", "Andi", "aktif"],
     ["Status", "Aktif", "terverifikasi"]
   ];
 }
 
-function dashboardPage() {
-  return `
-    <div class="shell">
-      ${topbar()}
-
-      <main class="dashboard-layout">
-        ${sidebar()}
-
-        <section class="dashboard-main">
-          <div class="dashhead">
-            <div>
-              <div class="eyebrow">PRIVATE WORKSPACE</div>
-              <h2>Dashboard ${state.role}</h2>
-            </div>
-
-            <div class="role-switch">
-              <button
-                class="${state.role === "Management" ? "active" : ""}"
-                onclick="changeRole('Management')">
-                Management
-              </button>
-
-              <button
-                class="${state.role === "Mitra" ? "active" : ""}"
-                onclick="changeRole('Mitra')">
-                Mitra
-              </button>
-
-              <button
-                class="${state.role === "Client" ? "active" : ""}"
-                onclick="changeRole('Client')">
-                Client
-              </button>
-            </div>
-          </div>
-
-          <p class="dashboard-intro">
-            Selamat datang, ${profileData().name}.
-            Berikut ringkasan aktivitas Anda hari ini.
-          </p>
-
-          <div class="role-info">
-            ${roleInfo().map(item => `
-              <div class="info-box">
-                <span>${item[0]}</span>
-                <b>${item[1]}</b>
-              </div>
-            `).join("")}
-          </div>
-
-          ${dashboardContent()}
-        </section>
-      </main>
-    </div>
-  `;
-}
-
-function dashboardContent() {
-  if (state.tab === "bio") return bioSettings();
-  if (state.tab === "settings") return settingsPage();
-  if (state.tab === "join-team") return joinTeamPage();
-  if (state.tab === "performance") return performancePage();
-  if (state.tab === "clients") return clientsPage();
-  if (state.tab === "partners") return partnersPage();
-  if (state.tab === "teams") return teamsPage();
-
-  return dashboardHome();
-}
-
 function dashboardHome() {
   return `
     <div class="stats">
-      ${dashboardSummary().map(item => `
+      ${summaryCards().map(card => `
         <div class="stat">
-          <span>${item[0]}</span>
-          <b>${item[1]}</b>
-          <small>${item[2]}</small>
+          <span>${card[0]}</span>
+          <b>${card[1]}</b>
+          <small>${card[2]}</small>
         </div>
       `).join("")}
     </div>
@@ -563,7 +514,7 @@ function dashboardHome() {
         </div>
 
         <div class="activity-item">
-          <strong>Client baru terdaftar</strong>
+          <strong>Member baru terdaftar</strong>
           <span>Kemarin</span>
         </div>
 
@@ -576,10 +527,85 @@ function dashboardHome() {
   `;
 }
 
+function filterBar(placeholder = "Cari data...") {
+  return `
+    <div class="filter-bar">
+      <input
+        id="tableSearch"
+        value="${esc(state.search)}"
+        placeholder="${placeholder}"
+        oninput="updateSearch(this.value)">
+
+      <select onchange="updateFilter(this.value)">
+        <option ${state.filter === "Semua" ? "selected" : ""}>
+          Semua
+        </option>
+        <option ${state.filter === "Aktif" ? "selected" : ""}>
+          Aktif
+        </option>
+        <option ${state.filter === "Menunggu" ? "selected" : ""}>
+          Menunggu
+        </option>
+        <option ${state.filter === "Ditolak" ? "selected" : ""}>
+          Ditolak
+        </option>
+      </select>
+    </div>
+  `;
+}
+
+function actionButtons() {
+  return `
+    <div class="action-cell">
+      <button
+        class="icon-btn accept"
+        title="Acc"
+        onclick="tableAction('Acc')">
+        ✓
+      </button>
+
+      <button
+        class="icon-btn reject"
+        title="Tolak"
+        onclick="tableAction('Tolak')">
+        !
+      </button>
+
+      <button
+        class="icon-btn delete"
+        title="Hapus"
+        onclick="tableAction('Hapus')">
+        ×
+      </button>
+    </div>
+  `;
+}
+
+function matchesSearch(row) {
+  const text = row.join(" ").toLowerCase();
+  const search = state.search.toLowerCase();
+
+  const searchMatch = !search || text.includes(search);
+  const status = row[row.length - 1];
+
+  const filterMatch =
+    state.filter === "Semua" || status === state.filter;
+
+  return searchMatch && filterMatch;
+}
+
 function partnersPage() {
+  const rows = [
+    ["Andi Saputra", "Andi Gold Community", "8", "126", "Jakarta", "Aktif"],
+    ["Budi Trader", "Budi Community", "5", "82", "Bandung", "Menunggu"],
+    ["Raka Network", "Raka Community", "3", "41", "Depok", "Aktif"]
+  ].filter(matchesSearch);
+
   return `
     <div class="panel">
       <h3>Daftar Mitra</h3>
+
+      ${filterBar("Cari nama, komunitas, atau kota...")}
 
       <div class="table-wrap">
         <table class="table">
@@ -587,25 +613,21 @@ function partnersPage() {
             <tr>
               <th>Nama</th>
               <th>Komunitas</th>
+              <th>Team</th>
+              <th>Client</th>
               <th>Kota</th>
               <th>Status</th>
+              <th>Aksi</th>
             </tr>
           </thead>
 
           <tbody>
-            <tr>
-              <td>Andi Saputra</td>
-              <td>Andi Gold Team</td>
-              <td>Jakarta</td>
-              <td>Aktif</td>
-            </tr>
-
-            <tr>
-              <td>Budi Trader</td>
-              <td>Budi Community</td>
-              <td>Bandung</td>
-              <td>Aktif</td>
-            </tr>
+            ${rows.map(row => `
+              <tr>
+                ${row.map(value => `<td>${esc(value)}</td>`).join("")}
+                <td>${actionButtons()}</td>
+              </tr>
+            `).join("")}
           </tbody>
         </table>
       </div>
@@ -614,35 +636,38 @@ function partnersPage() {
 }
 
 function teamsPage() {
+  const rows = [
+    ["Andi Gold Team", "Andi Community", "Jakarta", "126", "Aktif"],
+    ["Budi Trader Team", "Budi Community", "Bandung", "82", "Menunggu"],
+    ["Raka Team", "Raka Community", "Depok", "41", "Ditolak"]
+  ].filter(matchesSearch);
+
   return `
     <div class="panel">
-      <h3>Team</h3>
+      <h3>Daftar Team</h3>
+
+      ${filterBar("Cari nama, komunitas, atau kota...")}
 
       <div class="table-wrap">
         <table class="table">
           <thead>
             <tr>
               <th>Nama</th>
+              <th>Komunitas</th>
               <th>Kota</th>
-              <th>Client</th>
+              <th>Member</th>
               <th>Status</th>
+              <th>Aksi</th>
             </tr>
           </thead>
 
           <tbody>
-            <tr>
-              <td>Rizky A.</td>
-              <td>Jakarta</td>
-              <td>42</td>
-              <td>Aktif</td>
-            </tr>
-
-            <tr>
-              <td>Dimas P.</td>
-              <td>Depok</td>
-              <td>28</td>
-              <td>Aktif</td>
-            </tr>
+            ${rows.map(row => `
+              <tr>
+                ${row.map(value => `<td>${esc(value)}</td>`).join("")}
+                <td>${actionButtons()}</td>
+              </tr>
+            `).join("")}
           </tbody>
         </table>
       </div>
@@ -650,36 +675,39 @@ function teamsPage() {
   `;
 }
 
-function clientsPage() {
+function membersPage() {
+  const rows = [
+    ["Ahmad F.", "Andi Saputra", "Andi Community", "Jakarta", "Aktif"],
+    ["Rizky A.", "Andi Saputra", "Andi Community", "Bekasi", "Menunggu"],
+    ["Dimas P.", "Budi Trader", "Budi Community", "Bandung", "Aktif"]
+  ].filter(matchesSearch);
+
   return `
     <div class="panel">
-      <h3>Data Client</h3>
+      <h3>Daftar Member</h3>
+
+      ${filterBar("Cari nama, mentor, komunitas, atau kota...")}
 
       <div class="table-wrap">
         <table class="table">
           <thead>
             <tr>
-              <th>Nama Client</th>
-              <th>Nama Mentor</th>
+              <th>Nama</th>
+              <th>Mentor</th>
+              <th>Komunitas</th>
               <th>Kota</th>
               <th>Status</th>
+              <th>Aksi</th>
             </tr>
           </thead>
 
           <tbody>
-            <tr>
-              <td>Ahmad F.</td>
-              <td>Andi Saputra</td>
-              <td>Jakarta</td>
-              <td>Aktif</td>
-            </tr>
-
-            <tr>
-              <td>Rizky A.</td>
-              <td>Andi Saputra</td>
-              <td>Bekasi</td>
-              <td>Aktif</td>
-            </tr>
+            ${rows.map(row => `
+              <tr>
+                ${row.map(value => `<td>${esc(value)}</td>`).join("")}
+                <td>${actionButtons()}</td>
+              </tr>
+            `).join("")}
           </tbody>
         </table>
       </div>
@@ -688,7 +716,7 @@ function clientsPage() {
 }
 
 function bioSettings() {
-  const data = profileData();
+  const data = getProfile();
 
   return `
     <div class="two">
@@ -696,8 +724,8 @@ function bioSettings() {
         <h3>Pengaturan Link Bio</h3>
 
         <div class="field">
-          <label>Nama</label>
-          <input id="bioName" value="${data.name}">
+          <label>Nama Komunitas</label>
+          <input id="bioCommunity" value="${esc(data.community)}">
         </div>
 
         <br>
@@ -706,14 +734,13 @@ function bioSettings() {
           <label>Logo</label>
 
           <input
-            id="bioLogoFile"
             type="file"
             accept="image/*"
             onchange="previewImage(event, 'bioLogoPreview')">
 
           <img
             id="bioLogoPreview"
-            src="${data.logo}"
+            src="${esc(data.logo)}"
             style="width:80px;height:80px;object-fit:cover;border-radius:50%;margin-top:12px">
         </div>
 
@@ -723,7 +750,6 @@ function bioSettings() {
           <label>Background Link Bio</label>
 
           <input
-            id="bioBackgroundFile"
             type="file"
             accept="image/*"
             onchange="previewImage(event, 'bioBackgroundPreview')">
@@ -731,7 +757,7 @@ function bioSettings() {
           <div
             id="bioBackgroundPreview"
             class="preview-background"
-            style="background-image:url('${data.background}')">
+            style="background-image:url('${esc(data.bioBackground)}')">
             Preview Background
           </div>
         </div>
@@ -740,31 +766,15 @@ function bioSettings() {
 
         <div class="field">
           <label>Deskripsi</label>
-          <textarea id="bioDescription" rows="4">${data.description}</textarea>
+          <textarea id="bioDescription" rows="4">${esc(data.description)}</textarea>
         </div>
 
-        <h3 style="margin-top:22px">Link Tambahan</h3>
+        <h3 style="margin-top:22px">
+          Link Tambahan
+        </h3>
 
         <div id="linkEditor" class="link-editor">
-          ${data.links.map((link, index) => `
-            <div class="link-row">
-              <input
-                class="link-label"
-                value="${link.label}"
-                placeholder="Nama link">
-
-              <input
-                class="link-url"
-                value="${link.url}"
-                placeholder="https://...">
-
-              <button
-                class="btn btn-dark"
-                onclick="removeLink(${index})">
-                Hapus
-              </button>
-            </div>
-          `).join("")}
+          ${data.links.slice(0, 1).map((link, index) => linkRow(link, index)).join("")}
         </div>
 
         <button
@@ -787,10 +797,11 @@ function bioSettings() {
       </div>
 
       <div class="panel">
-        <h3>Preview Link Bio</h3>
+        <h3>Link Bio Publik</h3>
 
         <p class="section-sub">
-          Link Bio dapat digunakan di media sosial dan WhatsApp.
+          Gunakan link ini pada Instagram, TikTok, WhatsApp,
+          atau platform lain.
         </p>
 
         <div class="notice">
@@ -808,6 +819,40 @@ function bioSettings() {
   `;
 }
 
+function linkRow(link, index) {
+  return `
+    <div class="link-row">
+      <label>Nama Link</label>
+      <input
+        class="link-label"
+        value="${esc(link.label)}"
+        placeholder="Contoh: WhatsApp">
+
+      <label>URL Link</label>
+      <input
+        class="link-url"
+        value="${esc(link.url)}"
+        placeholder="https://...">
+
+      <button
+        class="btn btn-dark"
+        onclick="this.parentElement.remove()">
+        Hapus Link
+      </button>
+    </div>
+  `;
+}
+
+function addLink() {
+  document.querySelector("#linkEditor").insertAdjacentHTML(
+    "beforeend",
+    linkRow({
+      label: "",
+      url: ""
+    }, Date.now())
+  );
+}
+
 function previewImage(event, targetId) {
   const file = event.target.files[0];
 
@@ -818,11 +863,11 @@ function previewImage(event, targetId) {
   reader.onload = function () {
     const target = document.querySelector(`#${targetId}`);
 
-    if (targetId.includes("Logo")) {
+    if (targetId.toLowerCase().includes("logo")) {
       target.src = reader.result;
     } else {
       target.style.backgroundImage =
-        `url('${reader.result}')`;
+        `url("${reader.result}")`;
     }
 
     target.dataset.image = reader.result;
@@ -831,36 +876,12 @@ function previewImage(event, targetId) {
   reader.readAsDataURL(file);
 }
 
-function addLink() {
-  document.querySelector("#linkEditor").insertAdjacentHTML(
-    "beforeend",
-    `
-      <div class="link-row">
-        <input class="link-label" placeholder="Nama link">
-        <input class="link-url" placeholder="https://...">
-
-        <button
-          class="btn btn-dark"
-          onclick="this.parentElement.remove()">
-          Hapus
-        </button>
-      </div>
-    `
-  );
-}
-
-function removeLink(index) {
-  const rows = document.querySelectorAll(".link-row");
-
-  if (rows[index]) {
-    rows[index].remove();
-  }
-}
-
 function saveBio() {
-  const oldData = profileData();
+  const old = getProfile();
 
-  const logoPreview = document.querySelector("#bioLogoPreview");
+  const logoPreview =
+    document.querySelector("#bioLogoPreview");
+
   const backgroundPreview =
     document.querySelector("#bioBackgroundPreview");
 
@@ -869,14 +890,14 @@ function saveBio() {
       label: row.querySelector(".link-label").value.trim(),
       url: row.querySelector(".link-url").value.trim()
     }))
-    .filter(link => link.label && link.url);
+    .filter(item => item.label && item.url);
 
-  saveProfile({
-    ...oldData,
-    name: document.querySelector("#bioName").value.trim(),
-    logo: logoPreview.dataset.image || oldData.logo,
-    background:
-      backgroundPreview.dataset.image || oldData.background,
+  setProfile({
+    ...old,
+    community: document.querySelector("#bioCommunity").value.trim(),
+    logo: logoPreview.dataset.image || old.logo,
+    bioBackground:
+      backgroundPreview.dataset.image || old.bioBackground,
     description:
       document.querySelector("#bioDescription").value.trim(),
     links
@@ -884,13 +905,13 @@ function saveBio() {
 
   document.querySelector("#bioMessage").innerHTML = `
     <div class="notice">
-      Link Bio berhasil disimpan di browser ini.
+      Link Bio berhasil disimpan.
     </div>
   `;
 }
 
 function settingsPage() {
-  const data = profileData();
+  const data = getProfile();
 
   return `
     <div class="panel">
@@ -898,18 +919,28 @@ function settingsPage() {
 
       <div class="form-grid">
         <div class="field">
+          <label>Nama Pemilik Komunitas</label>
+          <input id="settingOwner" value="${esc(data.owner)}">
+        </div>
+
+        <div class="field">
           <label>Nama Komunitas</label>
-          <input id="settingName" value="${data.name}">
+          <input id="settingCommunity" value="${esc(data.community)}">
         </div>
 
         <div class="field">
           <label>Nama Kota</label>
-          <input id="settingCity" value="${data.city}">
+          <input id="settingCity" value="${esc(data.city)}">
+        </div>
+
+        <div class="field">
+          <label>WhatsApp</label>
+          <input id="settingWhatsapp" value="${esc(data.whatsapp)}">
         </div>
       </div>
 
       <div class="upload-box" style="margin-top:16px">
-        <label>Upload Logo Komunitas</label>
+        <label>Logo Komunitas</label>
 
         <input
           type="file"
@@ -918,24 +949,8 @@ function settingsPage() {
 
         <img
           id="settingLogoPreview"
-          src="${data.logo}"
+          src="${esc(data.logo)}"
           style="width:80px;height:80px;object-fit:cover;border-radius:50%;margin-top:12px">
-      </div>
-
-      <div class="upload-box" style="margin-top:16px">
-        <label>Upload Background Komunitas</label>
-
-        <input
-          type="file"
-          accept="image/*"
-          onchange="previewImage(event, 'settingBackgroundPreview')">
-
-        <div
-          id="settingBackgroundPreview"
-          class="preview-background"
-          style="background-image:url('${data.background}')">
-          Preview Background
-        </div>
       </div>
 
       <button
@@ -951,103 +966,25 @@ function settingsPage() {
 }
 
 function saveSettings() {
-  const oldData = profileData();
+  const old = getProfile();
 
-  const logoPreview =
+  const preview =
     document.querySelector("#settingLogoPreview");
 
-  const backgroundPreview =
-    document.querySelector("#settingBackgroundPreview");
-
-  saveProfile({
-    ...oldData,
-    name: document.querySelector("#settingName").value,
-    city: document.querySelector("#settingCity").value,
-    logo: logoPreview.dataset.image || oldData.logo,
-    background:
-      backgroundPreview.dataset.image || oldData.background
+  setProfile({
+    ...old,
+    owner: document.querySelector("#settingOwner").value.trim(),
+    community:
+      document.querySelector("#settingCommunity").value.trim(),
+    city: document.querySelector("#settingCity").value.trim(),
+    whatsapp:
+      document.querySelector("#settingWhatsapp").value.trim(),
+    logo: preview.dataset.image || old.logo
   });
 
   document.querySelector("#settingsMessage").innerHTML = `
     <div class="notice">
-      Setting komunitas berhasil disimpan.
-    </div>
-  `;
-}
-
-function joinTeamPage() {
-  return `
-    <div class="join-team-box">
-      <h2>Join Team</h2>
-
-      <p class="section-sub">
-        Tambahkan anggota baru ke dalam team Anda melalui
-        pendaftaran broker resmi.
-      </p>
-
-      <div class="form-grid">
-        <div class="field">
-          <label>Nama Calon Anggota</label>
-          <input id="teamName">
-        </div>
-
-        <div class="field">
-          <label>WhatsApp</label>
-          <input id="teamWhatsapp">
-        </div>
-
-        <div class="field">
-          <label>Email</label>
-          <input id="teamEmail" type="email">
-        </div>
-
-        <div class="field">
-          <label>Nama Kota</label>
-          <input id="teamCity">
-        </div>
-      </div>
-
-      <button
-        class="btn btn-gold"
-        style="margin-top:18px"
-        onclick="submitTeamInvite()">
-        Kirim Undangan
-      </button>
-
-      <div id="teamResult"></div>
-    </div>
-  `;
-}
-
-function submitTeamInvite() {
-  const name = document.querySelector("#teamName").value.trim();
-  const whatsapp =
-    document.querySelector("#teamWhatsapp").value.trim();
-  const email =
-    document.querySelector("#teamEmail").value.trim();
-  const city =
-    document.querySelector("#teamCity").value.trim();
-
-  if (!name || !whatsapp || !email || !city) {
-    document.querySelector("#teamResult").innerHTML = `
-      <div class="notice">
-        Lengkapi semua data terlebih dahulu.
-      </div>
-    `;
-    return;
-  }
-
-  document.querySelector("#teamResult").innerHTML = `
-    <div class="notice">
-      Undangan berhasil dibuat.<br><br>
-
-      <a
-        class="btn btn-gold"
-        href="${brokerRegistrationUrl}"
-        target="_blank"
-        rel="noopener">
-        Daftar Broker
-      </a>
+      Setting berhasil disimpan.
     </div>
   `;
 }
@@ -1058,8 +995,7 @@ function performancePage() {
       <h3>Trading Performance</h3>
 
       <p class="section-sub">
-        Data performance dimasukkan secara manual karena belum
-        terhubung langsung dengan broker.
+        Data performance diinput secara manual.
       </p>
 
       <div class="form-grid">
@@ -1099,10 +1035,8 @@ function performancePage() {
 function calculatePerformance() {
   const start = Number(document.querySelector("#start").value) || 0;
   const end = Number(document.querySelector("#end").value) || 0;
-  const trades =
-    Number(document.querySelector("#trades").value) || 0;
-  const wins =
-    Number(document.querySelector("#wins").value) || 0;
+  const trades = Number(document.querySelector("#trades").value) || 0;
+  const wins = Number(document.querySelector("#wins").value) || 0;
 
   const profit = end - start;
   const returnRate = start ? profit / start * 100 : 0;
@@ -1128,11 +1062,78 @@ function calculatePerformance() {
   `;
 }
 
-function bioPage() {
-  const data = profileData();
+function joinTablePage() {
+  return `
+    <div class="panel">
+      <h3>Data</h3>
+      <p class="section-sub">
+        Halaman ini tersedia sesuai hak akses role.
+      </p>
+    </div>
+  `;
+}
 
-  const background = data.background
-    ? `background-image:url('${data.background}')`
+function dashboardContent() {
+  if (state.tab === "partners") return partnersPage();
+  if (state.tab === "teams") return teamsPage();
+  if (state.tab === "members") return membersPage();
+  if (state.tab === "bio") return bioSettings();
+  if (state.tab === "settings") return settingsPage();
+  if (state.tab === "performance") return performancePage();
+
+  return dashboardHome();
+}
+
+function dashboardPage() {
+  const data = getProfile();
+
+  return `
+    <div class="shell">
+      ${topbar()}
+
+      <main class="dashboard-layout">
+        ${sidebar()}
+
+        <section class="dashboard-main">
+          <div class="dashhead">
+            <div>
+              <div class="eyebrow">PRIVATE WORKSPACE</div>
+              <h2>
+                Dashboard ${publicRole()}
+              </h2>
+            </div>
+
+            ${roleButtons()}
+          </div>
+
+          <p class="dashboard-intro">
+            Selamat datang, <b>${esc(data.owner)}</b>.
+            Anda mengelola komunitas
+            <b>${esc(data.community)}</b>
+            di kota ${esc(data.city)}.
+          </p>
+
+          <div class="role-info">
+            ${roleInfo().map(item => `
+              <div class="info-box">
+                <span>${item[0]}</span>
+                <b>${esc(item[1])}</b>
+              </div>
+            `).join("")}
+          </div>
+
+          ${dashboardContent()}
+        </section>
+      </main>
+    </div>
+  `;
+}
+
+function bioPage() {
+  const data = getProfile();
+
+  const background = data.bioBackground
+    ? `background-image:url("${data.bioBackground}")`
     : "";
 
   return `
@@ -1144,30 +1145,48 @@ function bioPage() {
           class="bio-card"
           style="${background}">
 
-          <img src="${data.logo}" alt="${data.name}">
+          <img src="${esc(data.logo)}" alt="${esc(data.community)}">
 
-          <h1>${data.name}</h1>
+          <h1>${esc(data.community)}</h1>
 
-          <p>${data.description}</p>
+          <p>
+            ${esc(data.description)}
+            <br>
+            ${esc(data.city)}
+          </p>
 
           <div class="bio-links">
             ${data.links.map(link => `
               <a
-                href="${link.url}"
+                href="${esc(link.url)}"
                 target="_blank"
                 rel="noopener">
-                ${link.label}
+                ${esc(link.label)}
               </a>
             `).join("")}
 
             <a href="#/dashboard">
-              Masuk ke Workspace
+              Masuk ke Dashboard
             </a>
           </div>
         </div>
       </main>
     </div>
   `;
+}
+
+function updateSearch(value) {
+  state.search = value;
+  render();
+}
+
+function updateFilter(value) {
+  state.filter = value;
+  render();
+}
+
+function tableAction(action) {
+  alert(`Aksi "${action}" dipilih.`);
 }
 
 function toggleSidebar() {
@@ -1177,20 +1196,24 @@ function toggleSidebar() {
 
 function setTab(tab) {
   state.tab = tab;
+  state.search = "";
+  state.filter = "Semua";
   render();
 }
 
 function changeRole(role) {
-  state.role = role;
+  state.internalRole = role;
   state.tab = "dashboard";
+  state.search = "";
+  state.filter = "Semua";
   render();
 }
 
 function logout() {
-  state.role = "Management";
-  state.tab = "dashboard";
-  state.sidebarOpen = true;
   location.hash = "#/";
+  state.tab = "dashboard";
+  state.internalRole = "management";
+  state.sidebarOpen = true;
 }
 
 function render() {
@@ -1222,13 +1245,14 @@ window.setTab = setTab;
 window.changeRole = changeRole;
 window.logout = logout;
 window.submitApplication = submitApplication;
-window.submitTeamInvite = submitTeamInvite;
 window.previewImage = previewImage;
 window.addLink = addLink;
-window.removeLink = removeLink;
 window.saveBio = saveBio;
 window.saveSettings = saveSettings;
 window.calculatePerformance = calculatePerformance;
+window.updateSearch = updateSearch;
+window.updateFilter = updateFilter;
+window.tableAction = tableAction;
 
 window.addEventListener("hashchange", render);
 
